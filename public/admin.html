@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - PropScholar Blog</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="box">
+      <h1>Admin Dashboard - Blog Submissions</h1>
+      
+      <p style="color: #cbd5e1; margin-bottom: 20px;">
+        Total submissions are displayed below:
+      </p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Blog (First 100 chars)</th>
+            <th>Submitted At</th>
+          </tr>
+        </thead>
+        <tbody id="submissions-table">
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 20px; color: #94a3b8;">
+              Loading submissions...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <p style="margin-top: 20px; color: #64748b; font-size: 12px;">
+        This dashboard auto-loads all blog submissions. Refresh to see the latest entries.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Fetch submissions from API
+    fetch('/submissions')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById('submissions-table');
+        
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">No submissions yet</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = data.map(submission => `
+          <tr>
+            <td>${submission.name}</td>
+            <td>${submission.email}</td>
+            <td>${submission.phone}</td>
+            <td>${submission.blog.substring(0, 100)}...</td>
+            <td>${new Date(submission.created_at).toLocaleDateString()}</td>
+          </tr>
+        `).join('');
+      })
+      .catch(err => {
+        document.getElementById('submissions-table').innerHTML = 
+          '<tr><td colspan="5" style="color: #ef4444; padding: 20px;">Error loading submissions. Please refresh.</td></tr>';
+        console.error('Error:', err);
+      });
+  </script>
+</body>
+</html>
