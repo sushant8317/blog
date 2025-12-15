@@ -211,6 +211,16 @@ app.post('/api/admin/events', async (req, res) => {
   }
 });
 
+
+      // Get all ACTIVE events (public)
+app.get('/api/events', async (req, res) => {
+  try {
+    const events = await Event.find({ status: 'active' }).sort({ createdAt: -1 });
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching events' });
+  }
+});
 // Get all events (admin)
 app.get('/api/admin/events', async (req, res) => {
   try {
