@@ -36,7 +36,7 @@ const eventSchema = new mongoose.Schema({
   minWords: { type: Number, default: 250 },
   status: { type: String, enum: ['active', 'closed'], default: 'active' },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
       reward: { type: String, default: '₹0' },
     imageUrl: { type: String, default: '🎯' }
 });
