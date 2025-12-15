@@ -94,7 +94,7 @@ app.get("/health", (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`\n=== PropScholar Blog Contest Server ===");
+  console.log(`\n=== PropScholar Blog Contest Server ===`);
   console.log(`Server running at http://localhost:${PORT}`);
   console.log(`Admin login at http://localhost:${PORT}/admin-login.html`);
   console.log(`Admin email: ${ADMIN_EMAIL}`);
