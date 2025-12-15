@@ -1,3 +1,4 @@
+50
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +34,8 @@
         const container = document.getElementById('eventContainer');
 
         if (!event.isActive) {
-          container.innerHTML = `
+          46
+            
             <h1 style="color: #94a3b8;">Event Closed</h1>
             <p style="color: #cbd5e1; text-align: center; margin: 30px 0;">
               Submissions for "${event.title}" are no longer accepting entries.
@@ -46,6 +48,7 @@
         }
 
         container.innerHTML = `
+                    <div class="box">
           <h1 class="title">${event.title}</h1>
           <p class="subtitle">${event.description || 'Submit your blog entry'}</p>
           
@@ -84,7 +87,7 @@
           <div class="note">
             <p><strong>Note:</strong> By submitting, you agree that your content is original and you own all rights.</p>
           </div>
-        `;
+              </div>\n`;
 
         setupForm(event);
       } catch (err) {
