@@ -1,49 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PropScholar Blog Writing Contest</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PropScholar - Blog Competitions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        
+        /* NAVBAR */
+        .navbar { background: linear-gradient(135deg, #001a4d 0%, #0d3b8f 100%); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; }
+        .navbar-logo { color: #00d4ff; font-size: 24px; font-weight: bold; }
+        .navbar-links { display: flex; gap: 40px; }
+        .navbar-links a { color: #fff; text-decoration: none; font-size: 16px; font-weight: 600; transition: all 0.3s; padding: 8px 15px; border-radius: 5px; }
+        .navbar-links a:hover { color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
+        
+        /* HERO SECTION */
+        .hero { background: linear-gradient(135deg, #001a4d 0%, #0d3b8f 100%); color: #fff; padding: 80px 40px; text-align: center; }
+        .hero h1 { font-size: 48px; margin-bottom: 20px; }
+        .hero p { font-size: 18px; color: rgba(255,255,255,0.8); margin-bottom: 30px; }
+        
+        /* CONTAINER */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* COMPETITIONS GRID */
+        .competitions-title { text-align: center; font-size: 36px; color: #001a4d; margin-bottom: 50px; font-weight: bold; }
+        .competitions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        
+        /* EVENT CARD */
+        .event-card { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s; cursor: pointer; }
+        .event-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+        
+        .event-image { width: 100%; height: 220px; background: linear-gradient(135deg, #001a4d 0%, #0d3b8f 100%); display: flex; align-items: center; justify-content: center; font-size: 60px; color: #00d4ff; }
+        
+        .event-content { padding: 25px; }
+        .event-title { font-size: 22px; font-weight: bold; color: #001a4d; margin-bottom: 10px; }
+        .event-desc { font-size: 14px; color: #666; margin-bottom: 15px; line-height: 1.5; }
+        
+        .event-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; }
+        .event-days { font-size: 12px; color: #00d4ff; font-weight: bold; }
+        .event-words { font-size: 12px; color: #666; }
+        
+        .event-reward { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 5px; margin-bottom: 15px; }
+        .reward-label { font-size: 12px; color: #856404; }
+        .reward-amount { font-size: 24px; font-weight: bold; color: #001a4d; }
+        
+        .event-btn { display: inline-block; background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%); color: #001a4d; padding: 12px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: all 0.3s; width: 100%; text-align: center; border: none; cursor: pointer; font-size: 14px; }
+        .event-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3); }
+        .event-btn:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .event-status { font-size: 12px; text-align: center; margin-top: 10px; }
+        .status-active { color: #28a745; font-weight: bold; }
+        .status-closed { color: #dc3545; font-weight: bold; }
+        
+        /* FOOTER */
+        .footer { background: #001a4d; color: #fff; text-align: center; padding: 40px; margin-top: 60px; }
+        .footer p { margin-bottom: 10px; }
+        .footer-links { margin-top: 20px; }
+        .footer-links a { color: #00d4ff; text-decoration: none; margin: 0 15px; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="box">
-      <h1 class="title">PropScholar Blog Writing Contest</h1>
-      <p class="subtitle">Share your trading insights and win amazing prizes!</p>
-      <p class="requirement">✓ Minimum 250 words required • Copy-paste disabled for fair evaluation</p>
-      
-      <form id="blogForm" method="POST" action="/submit" class="form">
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-logo">📚 PropScholar</div>
+        <div class="navbar-links">
+            <a href="#blog">Blog</a>
+            <a href="https://propscholar.space" target="_blank">Website</a>
         </div>
-
-        <div class="form-group">
-          <label for="email">Gmail Address</label>
-          <input type="email" id="email" name="email" placeholder="your.email@gmail.com" required>
-        </div>
-
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" placeholder="+91 9876543210" required>
-        </div>
-
-        <div class="form-group">
-          <label for="blog">Your Blog / Essay</label>
-          <textarea id="blog" name="blog" placeholder="Start writing your blog here (minimum 250 words)..." required></textarea>
-          <div id="wordCount" class="word-count">Words: <span>0</span> / 250</div>
-        </div>
-
-        <button type="submit" class="btn-submit">Submit Your Blog</button>
-      </form>
-
-      <div class="note">
-        <p><strong>Note:</strong> By submitting, you agree that your content is original and you own all rights.</p>
-      </div>
+    </nav>
+    
+    <!-- HERO -->
+    <div class="hero">
+        <h1>🏆 Blog Writing Competitions</h1>
+        <p>Share your trading insights, win amazing rewards & build your portfolio!</p>
     </div>
-  </div>
-
-  <script src="script.js"></script>
+    
+    <!-- COMPETITIONS -->
+    <div class="container">
+        <h2 class="competitions-title" id="blog">Active Competitions</h2>
+        <div class="competitions-grid" id="eventsContainer">
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
+                <h3>⏳ Loading competitions...</h3>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>&copy; 2025 PropScholar. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#blog">Blog</a>
+            <a href="https://propscholar.space">Website</a>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        
+        async function loadEvents() {
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/events`);
+                const events = await res.json();
+                
+                const container = document.getElementById('eventsContainer');
+                
+                if (events.length === 0) {
+                    container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 60px;"><h3>🎯 No competitions yet. Check back soon!</h3></div>';
+                    return;
+                }
+                
+                let html = '';
+                events.forEach(event => {
+                    const endDate = new Date(event.endDate);
+                    const now = new Date();
+                    const isActive = event.status === 'active' && now <= endDate;
+                    const daysLeft = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+                    const rewardAmount = event.reward || '₹5,000';
+                    const imageUrl = event.imageUrl || '🎯';
+                    
+                    const statusText = isActive ? `<span class="status-active">✅ Active (${daysLeft} days left)</span>` : '<span class="status-closed">❌ Closed</span>';
+                    const buttonClass = isActive ? 'event-btn' : 'event-btn' + ' disabled';
+                    const buttonText = isActive ? '📝 Submit Your Blog' : 'Contest Closed';
+                    
+                    html += `
+                        <div class="event-card">
+                            <div class="event-image">${imageUrl}</div>
+                            <div class="event-content">
+                                <div class="event-title">${event.title}</div>
+                                <div class="event-desc">${event.description || 'Share your best trading insights!'}</div>
+                                
+                                <div class="event-meta">
+                                    <span class="event-days">📅 ${endDate.toLocaleDateString()}</span>
+                                    <span class="event-words">📑 Min ${event.minWords} words</span>
+                                </div>
+                                
+                                <div class="event-reward">
+                                    <div class="reward-label">💰 Prize Money:</div>
+                                    <div class="reward-amount">${rewardAmount}</div>
+                                </div>
+                                
+                                <${isActive ? 'a' : 'button'} class="${buttonClass}" ${isActive ? `href="/events/${event.slug}"` : 'disabled'}>${buttonText}</${isActive ? 'a' : 'button'}>
+                                <div class="event-status">${statusText}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+            } catch (err) {
+                document.getElementById('eventsContainer').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 60px;"><h3>⚠️ Error loading competitions</h3></div>';
+                console.error(err);
+            }
+        }
+        
+        window.addEventListener('load', loadEvents);
+        setInterval(loadEvents, 30000);
+    </script>
 </body>
 </html>
