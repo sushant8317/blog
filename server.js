@@ -37,6 +37,8 @@ const eventSchema = new mongoose.Schema({
   status: { type: String, enum: ['active', 'closed'], default: 'active' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
+      reward: { type: String, default: '₹0' },
+    imageUrl: { type: String, default: '🎯' }
 });
 
 // Submission Schema
@@ -175,7 +177,7 @@ app.post('/api/admin/login', (req, res) => {
 // Create event
 app.post('/api/admin/events', async (req, res) => {
   try {
-    const { email, password, title, slug, description, startDate, endDate, minWords } = req.body;
+    const { email, password, title, slug, description, startDate, endDate, minWor, minWords, reward, imageUrl } } = req.body;
     
     // Verify admin
     if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
@@ -197,6 +199,8 @@ app.post('/api/admin/events', async (req, res) => {
       endDate: new Date(endDate),
       minWords: minWords || 250,
       status: 'active'
+          reward: reward || '₹5,000',
+          imageUrl: imageUrl || '🎯'
     });
     
     await event.save();
