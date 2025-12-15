@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PropScholar Blog Contest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="box" id="eventContainer">
+      <!-- Event content will load here -->
+      <p style="text-align: center; color: #94a3b8;">Loading event...</p>
+    </div>
+  </div>
+
+  <script>
+    // Get slug from URL
+    const slug = window.location.pathname.split('/').pop();
+
+    // Fetch event details
+    async function loadEvent() {
+      try {
+        const res = await fetch(`/api/events/${slug}`);
+        const event = await res.json();
+
+        if (!res.ok) {
+          document.getElementById('eventContainer').innerHTML = 
+            '<p style="color: #ef4444; text-align: center;">Event not found</p>';
+          return;
+        }
+
+        const container = document.getElementById('eventContainer');
+
+        if (!event.isActive) {
+          container.innerHTML = `
+            <h1 style="color: #94a3b8;">Event Closed</h1>
+            <p style="color: #cbd5e1; text-align: center; margin: 30px 0;">
+              Submissions for "${event.title}" are no longer accepting entries.
+            </p>
+            <p style="color: #64748b; text-align: center; font-size: 12px;">
+              Event ended on ${new Date(event.endDate).toLocaleDateString()}
+            </p>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          <h1 class="title">${event.title}</h1>
+          <p class="subtitle">${event.description || 'Submit your blog entry'}</p>
+          
+          <div class="event-info">
+            <span>Minimum words: <strong>${event.minWords}</strong></span>
+            <span>Days remaining: <strong style="color: #3b82f6;">${Math.max(0, event.daysRemaining)}</strong></span>
+          </div>
+          
+          <p class="requirement">✓ Minimum ${event.minWords} words required • Copy-paste disabled for fair evaluation</p>
+
+          <form id="blogForm" class="form">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Gmail Address</label>
+              <input type="email" id="email" name="email" placeholder="your.email@gmail.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="+91 9876543210" required>
+            </div>
+
+            <div class="form-group">
+              <label for="blog">Your Blog / Essay</label>
+              <textarea id="blog" name="blog" placeholder="Start writing your blog here..." required></textarea>
+              <div id="wordCount" class="word-count">Words: <span>0</span> / ${event.minWords}</div>
+            </div>
+
+            <button type="submit" class="btn-submit">Submit Your Blog</button>
+          </form>
+
+          <div class="note">
+            <p><strong>Note:</strong> By submitting, you agree that your content is original and you own all rights.</p>
+          </div>
+        `;
+
+        setupForm(event);
+      } catch (err) {
+        console.error('Error:', err);
+        document.getElementById('eventContainer').innerHTML = 
+          '<p style="color: #ef4444; text-align: center;">Error loading event. Please refresh.</p>';
+      }
+    }
+
+    // Setup form submission and word count
+    function setupForm(event) {
+      const form = document.getElementById('blogForm');
+      const blog = document.getElementById('blog');
+      const wordCountSpan = document.querySelector('#wordCount span');
+
+      // Prevent context menu
+      document.addEventListener('contextmenu', e => e.preventDefault());
+
+      // Prevent copy/cut/paste shortcuts
+      document.addEventListener('keydown', e => {
+        if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'v', 'a'].includes(e.key.toLowerCase())) {
+          e.preventDefault();
+        }
+      });
+
+      // Prevent paste
+      blog.addEventListener('paste', e => {
+        e.preventDefault();
+        alert('Pasting is disabled for fair evaluation.');
+      });
+
+      // Update word count
+      function updateCount() {
+        const words = blog.value.trim().split(/\s+/).filter(Boolean).length;
+        wordCountSpan.textContent = words;
+        
+        if (words >= event.minWords) {
+          wordCountSpan.style.color = '#22c55e';
+        } else if (words >= event.minWords * 0.8) {
+          wordCountSpan.style.color = '#eab308';
+        } else {
+          wordCountSpan.style.color = '#3b82f6';
+        }
+      }
+
+      blog.addEventListener('input', updateCount);
+      blog.addEventListener('keyup', updateCount);
+      updateCount();
+
+      // Form submission
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const blogText = blog.value.trim();
+        const wordCount = blogText.split(/\s+/).filter(Boolean).length;
+
+        if (wordCount < event.minWords) {
+          alert(`Minimum ${event.minWords} words required. You have ${wordCount} words.`);
+          return;
+        }
+
+        const btn = form.querySelector('button');
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+
+        try {
+          const res = await fetch(`/api/events/${slug}/submit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, phone, blog: blogText })
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            window.location.href = '/success.html';
+          } else {
+            alert(data.error || 'Error submitting blog');
+          }
+        } catch (err) {
+          console.error('Error:', err);
+          alert('Error submitting blog. Please try again.');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Submit Your Blog';
+        }
+      });
+    }
+
+    // Load event on page load
+    loadEvent();
+  </script>
+</body>
+</html>
