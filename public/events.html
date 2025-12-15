@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Contests - PropScholar</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #001a4d 0%, #0d3b8f 100%); min-height: 100vh; color: #fff; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .header h1 { font-size: 36px; margin-bottom: 10px; }
+        .header p { font-size: 16px; color: rgba(255,255,255,0.8); }
+        .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+        .event-card { background: rgba(0, 0, 0, 0.3); border: 2px solid #00d4ff; border-radius: 10px; padding: 25px; transition: all 0.3s; cursor: pointer; }
+        .event-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3); border-color: #00ffff; }
+        .event-title { font-size: 22px; font-weight: 600; margin-bottom: 10px; color: #00d4ff; }
+        .event-desc { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 15px; line-height: 1.5; }
+        .event-meta { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px; }
+        .event-meta span { background: rgba(0, 212, 255, 0.1); padding: 5px 10px; border-radius: 3px; }
+        .event-status { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .status-active { color: #00ff00; }
+        .status-closed { color: #ff4444; }
+        .btn { display: inline-block; background: #00d4ff; color: #001a4d; padding: 12px 30px; border-radius: 5px; font-weight: 600; text-decoration: none; transition: all 0.3s; border: none; cursor: pointer; font-size: 14px; }
+        .btn:hover { background: #00ffff; transform: scale(1.05); }
+        .btn-disabled { background: #666; color: #999; cursor: not-allowed; }
+        .btn-disabled:hover { background: #666; transform: scale(1); }
+        .no-events { text-align: center; padding: 60px 20px; }
+        .no-events h2 { font-size: 28px; margin-bottom: 10px; }
+        .no-events p { color: rgba(255,255,255,0.6); }
+        .nav { margin-bottom: 30px; text-align: center; }
+        .nav a { color: #00d4ff; text-decoration: none; margin: 0 15px; font-weight: 600; }
+        .nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="/">🏠 Home</a>
+            <a href="/admin.html">🔐 Admin</a>
+        </div>
+
+        <div class="header">
+            <h1>📄 PropScholar Blog Contests</h1>
+            <p>Submit your best trading insights and win!</p>
+        </div>
+
+        <div class="events-grid" id="eventsContainer">
+            <div class="no-events">
+                <h2>⏳ Loading events...</h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+
+        async function loadEvents() {
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/events`);
+                const events = await res.json();
+
+                const container = document.getElementById('eventsContainer');
+
+                if (events.length === 0) {
+                    container.innerHTML = `<div class="no-events" style="grid-column: 1/-1;"><h2>🙅 No events yet</h2><p>Check back soon for exciting blog contests!</p></div>`;
+                    return;
+                }
+
+                let html = '';
+                events.forEach(event => {
+                    const endDate = new Date(event.endDate);
+                    const now = new Date();
+                    const isActive = event.status === 'active' && now <= endDate;
+                    const daysLeft = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+
+                    const statusText = isActive ? `✅ Active (${daysLeft} days left)` : '❌ Closed';
+                    const statusClass = isActive ? 'status-active' : 'status-closed';
+                    const buttonClass = isActive ? 'btn' : 'btn btn-disabled';
+                    const buttonText = isActive ? '🔍 Submit Blog' : 'Contest Closed';
+
+                    html += `
+                        <div class="event-card">
+                            <div class="event-title">${event.title}</div>
+                            <div class="event-desc">${event.description || 'Share your trading insights'}</div>
+                            <div class="event-meta">
+                                <span>📅 Ends: ${endDate.toLocaleDateString()}</span>
+                                <span>📑 Min: ${event.minWords} words</span>
+                            </div>
+                            <div class="event-status ${statusClass}">${statusText}</div>
+                            <div style="margin-top: 20px;">
+                                <${isActive ? 'a' : 'button'} class="${buttonClass}" ${isActive ? `href="/events/${event.slug}"` : 'disabled'}>${buttonText}</${isActive ? 'a' : 'button'}>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            } catch (err) {
+                document.getElementById('eventsContainer').innerHTML = '<div class="no-events" style="grid-column: 1/-1;"><h2>⚠️ Error</h2><p>Failed to load events. Try refreshing.</p></div>';
+                console.error(err);
+            }
+        }
+
+        // Load events when page loads
+        window.addEventListener('load', loadEvents);
+        // Refresh every 30 seconds
+        setInterval(loadEvents, 30000);
+    </script>
+</body>
+</html>
