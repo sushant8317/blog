@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PropScholar Blog Writing Contest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="box">
+      <h1 class="title">PropScholar Blog Writing Contest</h1>
+      <p class="subtitle">Share your trading insights and win amazing prizes!</p>
+      <p class="requirement">✓ Minimum 250 words required • Copy-paste disabled for fair evaluation</p>
+      
+      <form id="blogForm" method="POST" action="/submit" class="form">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Gmail Address</label>
+          <input type="email" id="email" name="email" placeholder="your.email@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="+91 9876543210" required>
+        </div>
+
+        <div class="form-group">
+          <label for="blog">Your Blog / Essay</label>
+          <textarea id="blog" name="blog" placeholder="Start writing your blog here (minimum 250 words)..." required></textarea>
+          <div id="wordCount" class="word-count">Words: <span>0</span> / 250</div>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Your Blog</button>
+      </form>
+
+      <div class="note">
+        <p><strong>Note:</strong> By submitting, you agree that your content is original and you own all rights.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
