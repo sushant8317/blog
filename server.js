@@ -198,7 +198,7 @@ app.post('/api/admin/events', async (req, res) => {
       startDate: new Date(startDate),
       endDate: new Date(endDate),
       minWords: minWords || 250,
-      status: 'active'
+      status: 'active',
           reward: reward || '₹5,000',
           imageUrl: imageUrl || '🎯'
     });
