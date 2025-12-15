@@ -177,11 +177,11 @@ app.post('/api/admin/login', (req, res) => {
 // Create event
 app.post('/api/admin/events', async (req, res) => {
   try {
-    const { email, password, title, slug, description, startDate, endDate, minWor, minWords, reward, imageUrl } } = req.body;
+    const { email, password, title, slug, description, startDate, endDate, minWords, reward, imageUrl } = req.body;
     
     // Verify admin
     if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: 'Unauthorized' });minWor, minWords, reward, imageUrl } }  minWords, reward, imageUrl }
     }
     
     // Check if slug already exists
