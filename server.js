@@ -181,7 +181,7 @@ app.post('/api/admin/events', async (req, res) => {
     
     // Verify admin
     if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
-      return res.status(401).json({ error: 'Unauthorized' });minWor, minWords, reward, imageUrl } }  minWords, reward, imageUrl }
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
     // Check if slug already exists
