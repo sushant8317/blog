@@ -8,21 +8,66 @@
 </head>
 <body>
   <div class="container">
-    <form method="POST" action="/admin-login" class="login-box">
+    <form id="loginForm" class="login-box">
       <h2>Admin Login</h2>
-      
+      <p style="color: #cbd5e1; text-align: center; margin-bottom: 20px; font-size: 13px;">
+        Enter your credentials to access the event management dashboard
+      </p>
+
       <div class="form-group">
         <label for="email">Admin Email</label>
-        <input type="email" id="email" name="email" placeholder="Enter admin email" required>
+        <input type="email" id="email" name="email" placeholder="propscholars@gmail.com" required>
       </div>
-      
+
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" id="password" name="password" placeholder="Enter password" required>
       </div>
-      
+
       <button type="submit" class="btn-submit">Login to Dashboard</button>
+
+      <div style="background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 6px; margin-top: 20px; border-left: 3px solid #3b82f6;">
+        <p style="color: #93c5fd; font-size: 12px; margin: 0;">
+          <strong>Demo Credentials:</strong><br>
+          Email: propscholars@gmail.com<br>
+          Password: Hindi@1234
+        </p>
+      </div>
     </form>
   </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const correctEmail = 'propscholars@gmail.com';
+    const correctPassword = 'Hindi@1234';
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = form.querySelector('button');
+
+      if (email !== correctEmail || password !== correctPassword) {
+        alert('Invalid credentials');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+
+      try {
+        // Store password in localStorage for dashboard verification
+        localStorage.setItem('adminPass', password);
+        // Redirect to dashboard
+        setTimeout(() => {
+          window.location.href = '/admin-dashboard.html';
+        }, 500);
+      } catch (err) {
+        alert('Login error');
+        btn.disabled = false;
+        btn.textContent = 'Login to Dashboard';
+      }
+    });
+  </script>
 </body>
 </html>
